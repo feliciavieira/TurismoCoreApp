@@ -1,0 +1,35 @@
+﻿@page
+@model TurismoCoreApp.Pages.CalculationDemoModel
+@{
+    ViewData["Title"] = "Demonstração de Cálculos";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div>
+        <label>Preço do Pacote:</label>
+        <input asp-for="PrecoPacote" type="number" step="0.01" required />
+    </div>
+    <div>
+        <label>Número de Pessoas:</label>
+        <input asp-for="NumeroPessoas" type="number" min="1" required />
+    </div>
+    <button type="submit">Calcular</button>
+</form>
+
+@if (Model.Resultado != null)
+{
+    <div>
+        <p><strong>Valor Total:</strong> @Model.Resultado.ValorTotal</p>
+        <p><strong>Valor com Desconto (10%):</strong> @Model.Resultado.ValorComDesconto</p>
+    </div>
+}
+
+<h3>Logs em Memória</h3>
+<ul>
+    @foreach (var log in Model.Logs)
+    {
+        <li>@log</li>
+    }
+</ul>

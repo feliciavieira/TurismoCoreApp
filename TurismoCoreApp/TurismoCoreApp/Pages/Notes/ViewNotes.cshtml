@@ -1,0 +1,90 @@
+﻿@page
+@model TurismoCoreApp.Pages.Notes.ViewNotesModel
+@{
+    ViewData["Title"] = "Notes";
+}
+
+<div class="container">
+    <h1 class="mb-4">Notes</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <div class="row">
+        <!-- Left column - Available Notes -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Available Notes</h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.AvailableNotes.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var note in Model.AvailableNotes)
+                            {
+                                <li class="list-group-item">
+                                    <a asp-page="./ViewNotes" asp-route-selectedNote="@note">@note</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="p-3">No notes available</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column - Note Content and Creation -->
+        <div class="col-md-8">
+            <!-- Selected Note Content -->
+            @if (!string.IsNullOrEmpty(Model.SelectedNoteContent))
+            {
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Viewing Note</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre class="mb-0">@Model.SelectedNoteContent</pre>
+                    </div>
+                </div>
+            }
+
+            <!-- Create New Note Form -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Create New Note</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="CreateNote">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="NoteTitle" class="form-label">Title</label>
+                            <input asp-for="NoteTitle" class="form-control" />
+                            <span asp-validation-for="NoteTitle" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="NoteContent" class="form-label">Content</label>
+                            <textarea asp-for="NoteContent" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="NoteContent" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Note</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
